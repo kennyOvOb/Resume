@@ -9,20 +9,21 @@ from pathlib import Path
 import threading
 from pandas import ExcelFile
 import tkinter.messagebox as mbox
-# from datetime import date, timedelta  # 餘額表組要打開
 from style import SummaryStyle
 from bs4 import BeautifulSoup
 
-COMPANY_KEYWORDS = ["公司入款"]
-ONLINE_KEYWORDS = ["线上", "在线", "后台收入"]
-ARTIFICIAL_KEYWORDS = ["人工", "外置"]
-WITHDRAW_KEYWORDS = ["出款", "提现", "取款", "提款"]
-GA_CERTIFICATE = Path(r"\\192.168.200.3\ga-data\03-憑證")
-DESKTOP = Path.home() / 'Desktop'
-DESKTOP_MOULD = DESKTOP / "模板"
-DESKTOP_ACCOUNT = DESKTOP / "帳務"
+COMPANY_KEYWORDS = []
+ONLINE_KEYWORDS = []
+ARTIFICIAL_KEYWORDS = []
+WITHDRAW_KEYWORDS = []
 
-CLIENT_DATA = Path(r"\\192.168.200.3\ga-data\06-共用資料\06-02-帳務共用\06-02-05-共用工具\@盤口時間&幣別.xlsx")
+
+GA_CERTIFICATE = Path() # 雲端憑證路徑
+DESKTOP = Path.home() / 'Desktop'  # 桌面路徑
+DESKTOP_MOULD = DESKTOP / "模板"  # 桌面帳務路徑
+DESKTOP_ACCOUNT = DESKTOP / "帳務"  # 桌面帳務路徑
+
+CLIENT_DATA = Path() # 客戶工作分配表
 
 class SummeryTable:
     def __init__(self, date_range):
