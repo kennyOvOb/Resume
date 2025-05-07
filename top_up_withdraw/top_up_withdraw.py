@@ -12,18 +12,18 @@ import tkinter.messagebox as mbox
 from style import SummaryStyle
 from bs4 import BeautifulSoup
 
-COMPANY_KEYWORDS = []
-ONLINE_KEYWORDS = []
-ARTIFICIAL_KEYWORDS = []
-WITHDRAW_KEYWORDS = []
+COMPANY_KEYWORDS = ["company_keyword1", "company_keyword2"]  # Placeholder for company keywords
+ONLINE_KEYWORDS = ["online_keyword1", "online_keyword2"]  # Placeholder for online payment keywords
+ARTIFICIAL_KEYWORDS = ["artificial_keyword1", "artificial_keyword2"]  # Placeholder for artificial keywords
+WITHDRAW_KEYWORDS = ["withdraw_keyword1", "withdraw_keyword2"]  # Placeholder for withdraw keywords
 
 
-GA_CERTIFICATE = Path() # 雲端憑證路徑
+GA_CERTIFICATE = Path("C:/Data/Certificates")  # 雲端憑證路徑
 DESKTOP = Path.home() / 'Desktop'  # 桌面路徑
 DESKTOP_MOULD = DESKTOP / "模板"  # 桌面帳務路徑
 DESKTOP_ACCOUNT = DESKTOP / "帳務"  # 桌面帳務路徑
 
-CLIENT_DATA = Path() # 客戶工作分配表
+CLIENT_DATA = Path("C:/Data/ClientData/client_assignments.xlsx")  # 客戶工作分配表
 
 class SummeryTable:
     def __init__(self, date_range):
@@ -182,20 +182,20 @@ class SummeryTable:
         :return: 回傳已指定class的certificate或是None
         """
         mapping = {
-            "WG": CertificateForWG,
-            "万博": CertificateForWB,
-            "LEBO": CertificateForLEBO,
-            "BBIN": CertificateForBBIN,
-            "天成": CertificateForTC,
-            "GPK": CertificateForGPK,
-            "ROBO": CertificateForRobo,
-            "WGforPNN": CertificateForWGForPNN,
-            "WGForLYPB": CertificateForWGForLYPB,
-            "YQ": CertificateForYQ,
-            "EG": CertificateForEG,
-            "PANDA": CertificateForPANDA,
-            "澎湃": CertificateForPONPAI,
-            "OPK": CertificateForOPK
+            "System1": CertificateForWG,
+            "System2": CertificateForWB,
+            "System3": CertificateForLEBO,
+            "System4": CertificateForBBIN,
+            "System5": CertificateForTC,
+            "System6": CertificateForGPK,
+            "System7": CertificateForRobo,
+            "System8": CertificateForWGForPNN,
+            "System9": CertificateForWGForLYPB,
+            "System10": CertificateForYQ,
+            "System11": CertificateForEG,
+            "System12": CertificateForPANDA,
+            "System13": CertificateForPONPAI,
+            "System14": CertificateForOPK
         }
 
         if client_system_name in mapping:
@@ -602,9 +602,9 @@ class CertificateForBBIN(CertificateForWG):
         self.header = self.get_excel_header()
 
     def get_excel_header(self):
-        company_client_list = ["8号银河137", "28号永乐国际", "28号捕鱼达人", "ERA-2007", "ERA-4008",
-                               "18号金沙650"]  # , "ERA-2017"
-        online_client_list = []
+        company_client_list = ["Client1", "Client2", "Client3", "Client4", "Client5",
+                               "Client6"]  # Generic client names
+        online_client_list = ["OnlineClient1", "OnlineClient2"]  # Generic online client names
         if self.subject == "公司入款" and self.client_name in company_client_list:
             header = 1
         elif self.subject == "在线支付" and self.client_name in online_client_list:
@@ -614,17 +614,18 @@ class CertificateForBBIN(CertificateForWG):
         return header
 
     def get_read_parameter(self):
-        no_type_by_company_group = []
-        no_type_by_online_group = ["5号太阳城", "7号威尼5004", "7号巴黎人940", "7号永利9193",
-                                   "16号金沙2979",
-                                   "ZEE81-888集团6008", "ZEE82-澳门金沙集团1006", "ZEE83-必发集团8890",
-                                   "ZEE85-888集团8006"]
-        no_type_by_all_group = ["19号金沙2015", "19号金沙2016", "ERA-3003"]
-        special_parameter_group = ["1号银河076", "2号永利", "18号金沙650", "28号永乐国际", "28号捕鱼达人", "ERA-2007",
-                                   "ERA-4008",
-                                   "ERA-2017",
-                                   "ERA-304"]
-        special2_parameter_group = ["8号银河137"]
+        no_type_by_company_group = ["CompanyGroup1", "CompanyGroup2", "CompanyGroup3"]
+        no_type_by_online_group = ["OnlineGroup1", "OnlineGroup2", "OnlineGroup3", "OnlineGroup4",
+                                   "OnlineGroup5",
+                                   "OnlineGroup6", "OnlineGroup7", "OnlineGroup8",
+                                   "OnlineGroup9"]
+        no_type_by_all_group = ["AllGroup1", "AllGroup2", "AllGroup3"]
+        special_parameter_group = ["SpecialGroup1", "SpecialGroup2", "SpecialGroup3", "SpecialGroup4", 
+                                   "SpecialGroup5", "SpecialGroup6",
+                                   "SpecialGroup7",
+                                   "SpecialGroup8",
+                                   "SpecialGroup9"]
+        special2_parameter_group = ["Special2Group1"]
         if self.subject == "公司入款" or self.subject == "在线支付":
             if self.client_name in no_type_by_online_group:
                 (usecols, dtype) = self.no_type_by_online_parameter()
@@ -1239,11 +1240,11 @@ if __name__ == "__main__":
     # 將标准输出重定向回原来的地方（如有必要）
 
     # #公司入款 # 在线支付 #提现
-    # a = Path(r"\\192.168.200.3\ga-data\03-憑證\2024-8\ZEE92-23win\6.后台数据\4-240801-提现.xlsx")
+    # a = Path(r"C:\Data\Certificates\2024-8\Client1\6.后台数据\4-240801-提现.xlsx")
     # # df = pd.read_excel(a, usecols=["订单号.", "会员帐号", "收入金额", "状态"])
-    # b = CertificateForGPK(a, "提现", "ZEE92-23win")
+    # b = CertificateForGPK(a, "提现", "Client1")
     # print(b.get_data_for_certificate())
     #
-    # # a = Path(r"C:\Users\user\Desktop\當日模板\1号银河076.xlsx")
+    # # a = Path(r"C:\Data\Templates\Client2.xlsx")
     # # b = ClientMould(a)
     # # print(type(b.system_name))
