@@ -7,49 +7,49 @@ import time
 class SummaryStyle:
     def __init__(self, summary_path):
         self.summary_path = summary_path
-        self.sheet1_name = "單站點"
-        self.sheet2_name = "總站"
+        self.sheet1_name = "單客戶"
+        self.sheet2_name = "多客戶"
         self.sheet_list = [self.sheet1_name, self.sheet2_name]
         self.one_site_columns = {
-            "盤口": "A",
+            "客戶": "A",
             "預設": "B",
             "序号": "C",
             "日期": "D",
-            "三级科目": "E",
-            "充提人数": "F",
-            "充提笔数": "G",
+            "憑證種類": "E",
+            "人数": "F",
+            "笔数": "G",
             "金额": "H",
             "币别": "I",
             "路徑": "J",
-            "人數": "K",
-            "筆數": "L",
-            "總額": "M",
+            "憑證人數": "K",
+            "憑證筆數": "L",
+            "憑證總額": "M",
             "人數差額": "N",
             "筆數差額": "O",
             "金額差额": "P",
             "檢查": "Q"
         }
         self.total_site_columns = {
-            "盤口": "A",
+            "客戶": "A",
             "預設": "B",
             "序号": "C",
             "日期": "D",
-            "三级科目": "E",
-            "充提人数": "F",
-            "充提笔数": "G",
+            "憑證種類": "E",
+            "人数": "F",
+            "笔数": "G",
             "金额": "H",
             "币别": "I",
-            "站点": "J",
+            "子客戶": "J",
             "路徑": "K",
-            "人數": "L",
-            "筆數": "M",
-            "總額": "N",
+            "憑證人數": "L",
+            "憑證筆數": "M",
+            "憑證總額": "N",
             "人數差額": "O",
             "筆數差額": "P",
             "金額差额": "Q",
             "檢查": "R"
         }
-        self.certificate_columns = ["人數", "筆數", "總額"]
+        self.certificate_columns = ["憑證人數", "憑證筆數", "憑證總額"]
         self.client = 20
         self.index = 4.5703125
         self.date = 11.140625
@@ -139,7 +139,7 @@ class SummaryStyle:
         # sheet.column_dimensions["A"].fill = PatternFill("solid", fgColor="D9D9D9")  # 此行不知道為什麼不能生效，只有沒有數據的地方套用到
         sheet.column_dimensions["C"].width = self.index  # 序號
         sheet.column_dimensions["D"].width = self.date  # 日期
-        sheet.column_dimensions["E"].width = self.subject  # 三級科目
+        sheet.column_dimensions["E"].width = self.subject  # 憑證種類
         sheet.column_dimensions["F"].width = self.member  # 人數
         sheet.column_dimensions["G"].width = self.quantity  # 筆數
         sheet.column_dimensions["H"].width = self.amount  # 金額
@@ -152,15 +152,15 @@ class SummaryStyle:
             row_index = 1
             max_row = sheet.max_row
             self.general_settings(sheet)  # 到幣別之前
-            # site_condition True代表單站點，反之為總站
-            if sheet_name == "單站點":
+
+            if sheet_name == "單客戶":
                 columns_mapping = self.one_site_columns
                 site_condition = True
             else:
                 columns_mapping = self.total_site_columns
-                sheet.column_dimensions[columns_mapping["站点"]].width = self.site  # 站点
+                sheet.column_dimensions[columns_mapping["子客戶"]].width = self.site  # 站点
                 site_condition = False
-            sheet.column_dimensions[columns_mapping["總額"]].width = self.certificate_amount  # 總額
+            sheet.column_dimensions[columns_mapping["憑證總額"]].width = self.certificate_amount  # 總額
             while row_index <= max_row:
                 if row_index == 1:
                     self.apply_header_style(sheet, columns_mapping, site_condition)
@@ -191,7 +191,7 @@ class SummaryStyle:
         if site_condition:
             cells = sheet[columns_mapping["序号"] + "1:" + columns_mapping["币别"] + "1"]
         else:
-            cells = sheet[columns_mapping["序号"] + "1:" + columns_mapping["站点"] + "1"]
+            cells = sheet[columns_mapping["序号"] + "1:" + columns_mapping["子客戶"] + "1"]
         font, fill, border, alignment = self.header()
         for row in cells:
             for cell in row:
@@ -204,7 +204,7 @@ class SummaryStyle:
         if site_condition:
             column_range = columns_mapping["序号"] + str(index) + ":" + columns_mapping["币别"] + str(index)
         else:
-            column_range = columns_mapping["序号"] + str(index) + ":" + columns_mapping["站点"] + str(index)
+            column_range = columns_mapping["序号"] + str(index) + ":" + columns_mapping["子客戶"] + str(index)
         cells = sheet[column_range]
         if (index % 2) != 0:
             font, fill, border, alignment = self.odd_row()
@@ -220,7 +220,7 @@ class SummaryStyle:
     @staticmethod
     def apply_columns_fill(sheet, index, columns_mapping):
         # 盤口名稱
-        cell = sheet[columns_mapping["盤口"] + str(index)]
+        cell = sheet[columns_mapping["客戶"] + str(index)]
         cell.fill = PatternFill("solid", fgColor="D9D9D9")
         # 差额
         column_range = columns_mapping["人數差額"] + str(index) + ":" + columns_mapping["金額差额"] + str(index)
@@ -236,13 +236,13 @@ class SummaryStyle:
     def apply_columns_alignment(sheet, index, columns_mapping, site_condition):
         if index != 1:
             # 三級科目
-            cell = sheet[columns_mapping["三级科目"] + str(index)]
+            cell = sheet[columns_mapping["憑證種類"] + str(index)]
             cell.alignment = Alignment(horizontal="distributed", vertical="center")
             # 幣別
             cell = sheet[columns_mapping["币别"] + str(index)]
             cell.alignment = Alignment(horizontal="center", vertical="center")
             if not site_condition:
-                cell = sheet[columns_mapping["站点"] + str(index)]
+                cell = sheet[columns_mapping["子客戶"] + str(index)]
                 cell.alignment = Alignment(horizontal="center", vertical="center")
 
     @staticmethod
@@ -290,12 +290,12 @@ class SummaryStyle:
     @staticmethod
     def apply_function(sheet, index, columns_mapping):  # 写入公式空白必须为'""'，f字串也必须是''，单引号
         if index != 1:
-            mould_people_column = columns_mapping["充提人数"]
-            mould_count_column = columns_mapping["充提笔数"]
+            mould_people_column = columns_mapping["人数"]
+            mould_count_column = columns_mapping["笔数"]
             mould_amount_column = columns_mapping["金额"]
-            certificate_people_column = columns_mapping["人數"]
-            certificate_count_column = columns_mapping["筆數"]
-            certificate_amount_column = columns_mapping["總額"]
+            certificate_people_column = columns_mapping["憑證人數"]
+            certificate_count_column = columns_mapping["憑證筆數"]
+            certificate_amount_column = columns_mapping["憑證總額"]
             people_diff_column = columns_mapping["人數差額"]
             count_diff_column = columns_mapping["筆數差額"]
             amount_diff_column = columns_mapping["金額差额"]
