@@ -36,7 +36,7 @@
   - `Scrapy`：網站爬蟲框架
   - `Tkinter`：簡易圖形介面
   - `Pathlib`：檔案系統操作
-  - `OpenPyXL`：Excel 自動化
+  - `OpenPyXL`：Excel格式處裡
 - **SQL**：了解語法，具備初步資料查詢概念
 
 ---
