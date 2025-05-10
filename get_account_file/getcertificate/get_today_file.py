@@ -35,15 +35,15 @@ class TodayFile:
 
     @staticmethod
     def get_account_path(account_day_str):  # 取得ga上彙總放置路徑
-        account_path = GA_BASE_ACCOUNT_PUBLIC_DIR / ("帳務日" + account_day_str) / "帳務"
+        account_path = GA_BASE_ACCOUNT_PUBLIC_DIR / ("資料日" + account_day_str) / "資料"
         return account_path
 
     def get_last_account_day_in_ga_base_account(self):
         ga_base_account_folders = filter(
-            lambda file: ("帳務日" + self.str_date_ymd[2:4] in file.name) and (file.name != "帳務日(空白)"),
+            lambda file: ("資料日" + self.str_date_ymd[2:4] in file.name) and (file.name != "資料日(空白)"),
             GA_BASE_ACCOUNT_PUBLIC_DIR.glob("*"))
-        day_list = [datetime(int(self.str_date_ymd[:2]), int(folder.name.replace("帳務日", "")[:2]),
-                             int(folder.name.replace("帳務日", "")[-2:])) for folder in ga_base_account_folders]
+        day_list = [datetime(int(self.str_date_ymd[:2]), int(folder.name.replace("資料日", "")[:2]),
+                             int(folder.name.replace("資料日", "")[-2:])) for folder in ga_base_account_folders]
         if day_list:
             min_date_by_day = min(day_list).day
         else:
@@ -153,11 +153,11 @@ class TodayFile:
     def get_mould_board_path(self, account_day_str, whole_file_name, account_day_by_day):  # 取得ga上模板放置路徑
         last_account_day_in_ga_base_account = self.get_last_account_day_in_ga_base_account()
         if account_day_by_day >= last_account_day_in_ga_base_account:
-            mould_board_path = GA_BASE_ACCOUNT_PUBLIC_DIR / ("帳務日" + account_day_str) / "模板" / whole_file_name  #
+            mould_board_path = GA_BASE_ACCOUNT_PUBLIC_DIR / ("資料日" + account_day_str) / "模板" / whole_file_name  #
         else:
             mould_board_path = GA_BASE_ACCOUNT_PUBLIC_DIR / (
                 datetime.strptime(self.str_date_ymd, "%y%m%d").strftime("%Y.%#m")) / (
-                                       "帳務日" + account_day_str) / "模板" / whole_file_name  #
+                                       "資料日" + account_day_str) / "模板" / whole_file_name  #
         return mould_board_path
 
     def move_mould_board(self, file_needed_list, log):
@@ -199,12 +199,12 @@ class TodayFile:
     def get_summary_path(self, account_day_str, whole_file_name, account_day_ymd, account_day_by_day):  # 取得ga上彙總放置路徑
         last_account_day_in_ga_base_account = self.get_last_account_day_in_ga_base_account()
         if account_day_by_day >= last_account_day_in_ga_base_account:
-            summary_path = GA_BASE_ACCOUNT_PUBLIC_DIR / ("帳務日" + account_day_str) / "帳務" / (
+            summary_path = GA_BASE_ACCOUNT_PUBLIC_DIR / ("資料日" + account_day_str) / "資料" / (
                     whole_file_name + "-" + account_day_ymd) / "7.报表凭证"
         else:
             summary_path = GA_BASE_ACCOUNT_PUBLIC_DIR / (
                 datetime.strptime(account_day_ymd, "%y%m%d").strftime("%Y.%#m")) / (
-                                   "帳務日" + account_day_str) / "帳務" / (
+                                   "資料日" + account_day_str) / "資料" / (
                                    whole_file_name + "-" + account_day_ymd) / "7.报表凭证"
         return summary_path
 
@@ -244,24 +244,24 @@ class TodayFile:
                     account_day_ymd = account_day.strftime("%y%m%d")
         return log
 
-    # 平日帳務
+    # 平日資料
     def move_today_account(self, file_needed_list, log):
         """
-        設定帳務儲存路徑為桌面帳務資料夾
+        設定資料儲存路徑為桌面資料資料夾
         若沒有此資料夾創建一個
         取的沒有年份的日期字串
-        用get_account_path取的GA帳務路徑
+        用get_account_path取的GA資料路徑
         取得大寫名稱的需求客戶名稱
-        取得GA帳務放置路徑底下帳務的迭代器
-        用此迭代器取得過濾後剩下的路徑，過濾方式為資料夾名稱轉為大寫後，用-分列的第一個字，帳務資料夾為客戶名稱-日期，最後抓取這些到桌面
+        取得GA資料放置路徑底下資料的迭代器
+        用此迭代器取得過濾後剩下的路徑，過濾方式為資料夾名稱轉為大寫後，用-分列的第一個字，資料資料夾為客戶名稱-日期，最後抓取這些到桌面
 
         :param file_needed_list:需求的客戶名單
         :param log:
         :return:
         """
-        storage_path = self.get_storage_path(folder_name="帳務")  # 儲存路徑
+        storage_path = self.get_storage_path(folder_name="資料")  # 儲存路徑
         if not storage_path.exists():
-            self.creat_folder(folder_name="帳務")
+            self.creat_folder(folder_name="資料")
         account_day_str = self.str_date_ymd[-4:]
         account_path = self.get_account_path(account_day_str)
         account_needed_list_upper = [account.upper() for account in file_needed_list]
@@ -283,7 +283,7 @@ class TodayFile:
         short_account = account_needed_upper_set.difference(account_in_storage_path_set)
         for account_folder in short_account:
             folder_name_split: list = account_folder.split("-")
-            log.append(["-".join(folder_name_split[:-1]), folder_name_split[-1], "沒找到此帳務"])
+            log.append(["-".join(folder_name_split[:-1]), folder_name_split[-1], "沒找到此資料"])
 
         return log
 
@@ -327,7 +327,7 @@ class TodayFile:
     def get_file(self, person, action):
         folder_map: dict = {"over_summary": "關帳彙總",
                             "over_mould_board": "關帳模板",
-                            "today_account": "帳務",
+                            "today_account": "資料",
                             "summary": "所需彙總",
                             "mould_board": "當日模板",
                             "question": "問題整合"}

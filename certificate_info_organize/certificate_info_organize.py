@@ -22,7 +22,7 @@ CERTIFICATE4_KEYWORDS = []
 GA_CERTIFICATE = Path("Cloud_Drive_path")  # 雲端憑證路徑
 DESKTOP = Path.home() / 'Desktop'  # 桌面路徑
 DESKTOP_MOULD = DESKTOP / "模板"  # 客戶檔案存放路徑
-DESKTOP_ACCOUNT = DESKTOP / "帳務"  # 桌面帳務路徑
+DESKTOP_ACCOUNT = DESKTOP / "資料"  # 桌面資料路徑
 
 CLIENT_DATA = Path("Cloud_Drive_path / client_assignments.xlsx")  # 客戶工作分配表
 

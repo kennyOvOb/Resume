@@ -18,7 +18,7 @@ class QuestionBot:
     def __init__(self):
         self.token_api: str = "your_bot_token"  # 機器人token
         self.ga_data_path = Path(r"Cloud_Drive_path")
-        self.account_common_path = self.ga_data_path / "06-共用資料" / "06-02-帳務共用"
+        self.account_common_path = self.ga_data_path / "06-共用資料" / "06-02-共用"
         self.account_common_tool_path = self.account_common_path / "06-02-05-共用工具"
         self.bot_file_path = self.account_common_tool_path / "08-提問機器人"
         self.database_path: Path = self.account_common_tool_path / "數據庫-2022.08啟用.xlsx"  # 客戶Telegram群組id對應表路徑
@@ -27,7 +27,7 @@ class QuestionBot:
         self.datatime_now: datetime = datetime.utcnow() # noqa
         # 取得機器人創建的時間，也就是bot執行時間，後續為了只執行機器人啟動時的指令，因telegram紀錄時間為uct+0故使用uct now
         self.today_account_str: str = (self.datatime_now - timedelta(2)).strftime(
-            '%y%m%d')  # 帳務日為今天日期減二，問題格式為240101-客戶名-提問.xlsx，因此需要字串
+            '%y%m%d')
         self.fail_doc: list = list()  # 失敗檔案的list
         self.fail_message_site: list = list()  # 失敗訊息的list
         self.group_id_dict: dict = self.get_group_id_dict()  # 使用對應表取的字典 {客戶名:群組ID}
@@ -473,7 +473,7 @@ class QuestionBot:
         doc_split，依照"-"分列，問題格式固定為日期-客戶名稱-提問.xlsx
         date_str:取得日期字串
         取得客戶名，之所以不是用doc_split[1]，是因為客戶名也有"-"，因此使用"-"join，範圍是[1:-1]也就是去掉日期跟提問.xlsx
-        如果日期等於帳務日跟有找到群組ID，則轉傳此問題到該群組，計數+1
+        如果日期等於檔案日期跟有找到群組ID，則轉傳此問題到該群組，計數+1
         如出錯告知錯誤原因，列出問題檔案，計數器+1
         如果日期不對或找不到ID，列出問題檔案，計數器+1
         最後檢查計數是否等於設定問題數量，滿足執行self.end

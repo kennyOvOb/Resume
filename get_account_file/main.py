@@ -116,7 +116,7 @@ if __name__ == "__main__":
     get_today_account_check_button = tk.Checkbutton(window, variable=get_today_account_check)
     get_today_account_check_button.place(x=130, y=30)
 
-    get_today_account_button = tk.Button(window, text="取得當日帳務",
+    get_today_account_button = tk.Button(window, text="取得當日資料",
                                          command=lambda: today_file.get_file(choice.get(), "today_account"))
     get_today_account_button.place(x=160, y=30)
 
